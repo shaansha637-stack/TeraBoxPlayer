@@ -1,0 +1,26 @@
+import SwiftUI
+import AVKit
+
+struct PlayerView: View {
+    let url: URL
+    let fileName: String
+
+    private var player: AVPlayer {
+        let headers: [String: String] = [
+            "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X)",
+            "Referer": "https://www.terabox.com/"
+        ]
+        let asset = AVURLAsset(url: url, options: [
+            "AVURLAssetHTTPHeaderFieldsKey": headers   // mimic the web player
+        ])
+        return AVPlayer(playerItem: AVPlayerItem(asset: asset))
+    }
+
+    var body: some View {
+        VideoPlayer(player: player)
+            .edgesIgnoringSafeArea(.all)
+            .navigationTitle(fileName)
+            .navigationBarTitleDisplayMode(.inline)
+            .onAppear { player.play() }
+    }
+}
